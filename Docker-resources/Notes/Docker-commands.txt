@@ -1,0 +1,36 @@
+docker info
+docker search
+
+# Run example selenium standalone with chrome debug - can connect with use of VNC on localhost:5900 password: secret
+docker run -i -d -p 4444:4444 -p 5900:5900 --name chrome-debug selenium/standalone-chrome-debug
+
+# Stop all containers
+docker stop $(docker ps -aq)
+#Remove all containers
+docker rm $(docker ps -aq)
+# Remove all exited consteiners
+docker rm $(docker ps -a -f status=exited -q)
+# Remove all images
+docker rmi $(docker images -q)
+
+# Pull image latest
+docker pull maven
+# Pull image specific
+docker pull maven:3.6.3-jdk-8
+
+#Flask from github examples
+
+docker build . --tag jlabs/flask-github:master --build-arg git_branch_name=master
+docker run -d --name flask.master -p 5010:5000 jlabs/flask-github:master
+
+docker build . --tag jlabs/flask-github:cheers --build-arg git_branch_name=cheers
+docker run -d --name flask.cheers -p 5011:5000 jlabs/flask-github:cheers
+
+# Zalenium
+docker pull elgalu/selenium
+docker pull dosel/zalenium
+
+docker run --rm -ti --name zalenium -p 4444:4444 \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v /tmp/videos:/home/seluser/videos \
+      --privileged dosel/zalenium start
